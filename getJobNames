@@ -1,0 +1,6 @@
+
+filePath  = 'C:\\Users\\Pete\\PycharmProjects\\HelloWorld\\fsr_utility\\jobList'
+jobs = open(filePath, 'r')
+
+for job in jobs:
+    print(job.strip()+ "_load_20171004122310.sh")
