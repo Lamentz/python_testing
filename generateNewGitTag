@@ -1,0 +1,36 @@
+import datetime
+
+'''
+This logic will check the tags in the project repository and generate a new tag name.
+
+'''
+
+
+tags = ['project-r_fsr_client_load_20170929_1\n', 'project-r_fsr_client_load_20170929_9Xp\n',
+        'r_app_fsr_dwereport_20160830_0\n', 'r_fsr_client_load_20170830_1\n', 'r_fsr_client_load_20170830_5\n',
+        'r_fsr_client_load_20170830_6\n', 'r_fsr_client_load_20170907_1\n', 'r_fsr_client_load_20170912_1\n',
+        'r_fsr_client_load_20170921_1\n', 'r_fsr_client_load_20170922_1\n', 'r_fsr_client_load_20170926\n',
+        'r_fsr_client_load_20170926_1\n', 'r_fsr_client_load_20170928_1\n', 'r_fsr_client_load_20170929_1\n',
+        'r_fsr_client_load_20170929_uP6\n', 'r_fsr_client_load_20171003_1\n', 'r_fsr_client_load_20171004_1\n',
+        'r_fsr_client_load_20171004_2\n', 'r_fsr_client_load_20171005_1\n', 'r_fsr_client_load_20171005_2\n',
+        'r_fsr_client_load_20171005_3\n', 'r_fsr_client_load_20171005_4\n', 'r_fsr_client_load_20171005_8\n',
+        'r_fsr_dwereport_20170830_1\n', 'r_fsr_dwereport_20170830_2\n']
+
+
+
+currentDate = datetime.datetime.utcnow().strftime("%Y%m%d")  # "20171002"
+projectName = "fsr_client_load"
+seq = 1
+tagName = "r_" + projectName + "_" + currentDate
+lastElements = [0]
+for tag in tags:
+    if tagName not in tag:
+        newTag = tagName
+    else:
+        splittag = tag.strip().split("_")
+        lastElements.append(int(splittag[-1]))
+        print("NewTag :" + tagName + " tag :" + tag + " lastElement :" + splittag[-1])
+        # print(tag)
+        # print (splittag[-1]) #get last element in tag - seq number
+maxSeq = max(lastElements) + 1
+print("NewTag :" + tagName + "_" + str(maxSeq))
