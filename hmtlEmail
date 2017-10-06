@@ -1,0 +1,36 @@
+#!/usr/bin/env python
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+
+def send_mail(params, type_):
+      email_subject = params['email_subject']
+      email_from = "from_email@domain.com"
+      email_to = params['email_to']
+      email_cc = params.get('email_cc')
+      email_bcc = params.get('email_bcc')
+      email_body = params['email_body']
+
+      msg = MIMEMultipart('alternative')
+      msg['To'] = email_to
+      msg['CC'] = email_cc
+      msg['Subject'] = email_subject
+      mt_html = MIMEText(email_body, type_)
+      msg.attach(mt_html)
+
+      server = smtplib.SMTP('YOUR_MAIL_SERVER.DOMAIN.COM')
+      server.set_debuglevel(1)
+      toaddrs = [email_to] + [email_cc] + [email_bcc]
+      server.sendmail(email_from, toaddrs, msg.as_string())
+      server.quit()
+
+# Calling the mailer functions
+params = {
+    'email_to': 'to_email@domain.com',
+    'email_cc': 'cc_email@domain.com',
+    'email_bcc': 'bcc_email@domain.com',
+    'email_subject': 'Test message from python library',
+    'email_body': '<h1>Hello World</h1>'
+}
+for t in ['plain', 'html']:
+    send_mail(params, t)
