@@ -1,0 +1,61 @@
+import socket
+import sys
+from _thread import *
+import pickle
+
+import time
+host = ''
+port = 12345
+
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+try:
+    s.bind((host, port))
+except socket.error as e:
+    print(str(e))
+
+s.listen(5)
+
+
+def threaded_client(conn):
+    conn.send(str.encode('Welcome type your info\n'))
+
+    while True:
+        buffer = b''
+        try:
+            data = conn.recv(2048)
+            if data:
+                    buffer += data
+
+            acts = pickle.loads(buffer)
+            for i , n in enumerate(acts):
+                print("Command Received: " + n)
+                acts[i] = 'Command ' + n + ' has been executed'
+
+            print(acts)
+            message = acts
+            reply = pickle.dumps(message)
+
+            if not data:
+                break
+            conn.sendall(reply)
+
+        except EOFError as error:
+            time.sleep(20)
+            print("Waiting for more data")
+
+
+
+    conn.close()
+
+
+while True:
+    conn, addr = s.accept()
+    print(str(addr))
+    print(addr[0])
+    try:
+        "connect to:" + addr[0]
+    except:
+          print('something went wrong')
+
+    start_new_thread(threaded_client, (conn,))
