@@ -1,0 +1,29 @@
+import socket
+import pickle
+import struct
+
+host = 'localhost'
+port = 12345
+
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+#Try to establish connection and print alert if unsuccessful
+try:
+    s.connect((host, port))
+    connection_msg = s.recv(2048)
+    print(connection_msg)
+    print("Connection Success :\n" +"port: " + str(port) + "\nhost: " + host)
+    cmd_list = ['task0','task1','task2']
+    print(cmd_list)
+    message = cmd_list
+
+    s.send(pickle.dumps(message))
+    reply = s.recv(2048)
+    act_results = pickle.loads(reply)
+    print(act_results)
+    s.close()
+except:
+    socket.error
+    print("Unable to connect on port " + str(port))
+
+
